@@ -204,14 +204,17 @@ public class SqlTest {
                     "where F.dest = TB.orig)" +
                     "select min(total) from ToB where orig = 'A'");
 
+            int a = 0;
             if(rs != null){
                 System.out.println("---------------min(total)---------------");
                 while(rs.next()) {
                     int min = rs.getInt("min");
                     System.out.println("min : "+min);
+                    a++;
                 }
                 rs = null;
             }
+            System.out.println(a);
 
 
             System.out.println("Continue? (Enter 1 for continue)");
@@ -221,6 +224,7 @@ public class SqlTest {
                     "from Sales\n" +
                     "group by cube(storeID, itemID, custID);");
 
+            a = 0;
             if(rs != null){
                 System.out.println("---------------cube---------------");
                 while(rs.next()) {
@@ -228,18 +232,22 @@ public class SqlTest {
                     String itemID = rs.getString("itemID");
                     String custID = rs.getString("custID");
                     int sumPrice = rs.getInt("sum");
+                    a++;
                     System.out.println("storeID : " + storeID + " / itemID : " + itemID + " / custID: " +custID + " / sum(price): " + sumPrice );
                 }
                 rs = null;
             }
+            System.out.println(a);
+
 
             System.out.println("Continue? (Enter 1 for continue)");
             scan.nextLine();
             System.out.println("OLAP test 2");
             rs = st.executeQuery("select storeID, itemID, custID, sum(price)\n" +
                     "from Sales F\n" +
-                    "group by cube(storeID, (itemID, custID));");
+                    "group by storeID, cube (itemID, custID);");
 
+            a = 0;
             if(rs != null){
                 System.out.println("---------------cube---------------");
                 while(rs.next()) {
@@ -247,10 +255,12 @@ public class SqlTest {
                     String itemID = rs.getString("itemID");
                     String custID = rs.getString("custID");
                     int sumPrice = rs.getInt("sum");
+                    a++;
                     System.out.println("storeID : " + storeID + " / itemID : " + itemID + " / custID: " +custID + " / sum(price): " + sumPrice );
                 }
                 rs = null;
             }
+            System.out.println(a);
 
             System.out.println("Continue? (Enter 1 for continue)");
             scan.nextLine();
@@ -258,7 +268,7 @@ public class SqlTest {
             rs = st.executeQuery("select storeID, itemID, custID, sum(price)\n" +
                     "from Sales F\n" +
                     "group by rollup(storeID, itemID, custID);");
-
+            a = 0;
             if(rs != null){
                 System.out.println("---------------rollup---------------");
                 while(rs.next()) {
@@ -266,10 +276,12 @@ public class SqlTest {
                     String itemID = rs.getString("itemID");
                     String custID = rs.getString("custID");
                     int sumPrice = rs.getInt("sum");
+                    a++;
                     System.out.println("storeID : " + storeID + " / itemID : " + itemID + " / custID: " +custID + " / sum(price): " + sumPrice );
                 }
                 rs = null;
             }
+            System.out.println(a);
 
         } catch (Exception e) {
             e.printStackTrace();
